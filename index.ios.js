@@ -12,14 +12,33 @@ var styles = React.StyleSheet.create({
     backgroundColor: 'white',
     fontSize: 30,
     margin: 80
+  },
+  container: {
+    flex: 1
   }
 });
 
 // PropertyFinderApp extends React.Component, the basic building block of the React UI.
-class PropertyFinderApp extends React.Component {
+class HelloWorld extends React.Component {
   // rendering below
   render() {
-    return React.createElement(React.Text, {style: styles.text}, "Hello World!");
+    // JavaScript syntax extension, which mixes HTML directly into javascript code
+    return <React.Text style={styles.text}>Hello World (Again)</React.Text>;
+  }
+}
+
+// below constructs a navigation controller, and applies a style and sets the inital route to the HelloWorld component.
+class PropertyFinderApp extends React.Component {
+  render() {
+    return (
+      <React.NavigatorIOS
+        style={styles.container}
+        initialRoute={{
+          title: 'Property Finder',
+          component: HelloWorld,
+        }} />
+
+      );
   }
 }
 
