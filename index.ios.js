@@ -3,6 +3,8 @@
 
 // this loads react native module, and assigns it to React variable.
 var React = require('react-native');
+// updating application routing to make initial route
+var SearchPage = require('./SearchPage');
 
 
 // adding css to index page.
@@ -18,7 +20,7 @@ var styles = React.StyleSheet.create({
   }
 });
 
-// PropertyFinderApp extends React.Component, the basic building block of the React UI.
+// extends React.Component, the basic building block of the React UI.
 class HelloWorld extends React.Component {
   // rendering below
   render() {
@@ -35,7 +37,8 @@ class PropertyFinderApp extends React.Component {
         style={styles.container}
         initialRoute={{
           title: 'Property Finder',
-          component: HelloWorld,
+          // root view from SearchPage.js
+          component: SearchPage,
         }} />
 
       );
