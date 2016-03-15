@@ -70,13 +70,33 @@ var styles = StyleSheet.create({
   }
 });
 
+// adding utility function:
+function urlForQueryAndPage(key, value, pageNumber) {
+  var data = {
+    country: 'uk',
+    pretty: '1',
+    encoding: 'json',
+    listing_type: 'buy',
+    action: 'search_listings',
+    page: pageNumber
+  };
+  data[key] = value;
+
+  var querystring = Object.keys(data)
+    .map(key => key + '=' + encodeURIComponent(data[key]))
+    .join('&');
+
+  return 'http://api.nestoria.co.uk/api?' + querystring;
+};
 // adding component
 class SearchPage extends Component {
   // creating a state variable setting searchString variable to london
     constructor(props) {
       super(props);
       this.state = {
-        searchString: 'london'
+        searchString: 'london',
+        // keeps track of whether a query is in progress
+        isLoading: false
       };
     }
     // eventhandler so that the input text changes when you delete it, rather than being placed forever (without this method)
@@ -86,8 +106,21 @@ class SearchPage extends Component {
       this.setState({ searchString: event.nativeEvent.text });
       console.log(this.state.searchString);
     }
+    _executeQuery(query) {
+      console.log(query);
+      this.setState({ isLoading: true });
+    }
+    onSearchPressed() {
+      var query = urlForQueryAndPage('place_name', this.state.searchString, 1);
+      this._executeQuery(query);
+    }
   render() {
-    // console.log('SearchPAge.render');
+    // tenary if statement that either adds an activity indicator or an empty view depending on the component's isLoading state
+    var spinner = this.state.isLoading ?
+    ( <ActivityIndicatorIOS
+        hidden='true'
+        size='large' /> ) :
+    ( <View/>);
     return (
       // one container, with two text labels
       <View style={styles.container}>
@@ -108,15 +141,21 @@ class SearchPage extends Component {
           <TouchableHighlight style={styles.button}
           // color of button once tapped
             underlayColor='99d9f4'>
-              <Text style={styles.buttonText}>Go</Text>
+
+              <Text style={styles.buttonText}
+              onPress={this.onSearchPressed.bind(this)}>
+
+              Go</Text>
           </TouchableHighlight>
         </View>
+
         <TouchableHighlight style={styles.button}
           underlayColor='#99d9f4'>
           <Text style={styles.buttonText}>Location</Text>
         </TouchableHighlight>
       <Image source={{uri: 'http://www.misskatecuttables.com/uploads/shopping_cart/9295/large_cute-house.png'}}
         style={styles.image} />
+        {spinner}
       </View>
       );
   }
