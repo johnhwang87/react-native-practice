@@ -130,6 +130,7 @@ class SearchPage extends Component {
     _handleResponse(response) {
       this.setState({ isLoading: false , message: '' });
       if (response.application_response_code.substr(0, 1) === '1') {
+        // .push gives the back navigation page on the results page
         this.props.navigator.push({
           title: 'Results',
           // navigates to SearchResults component and passes in the listings from the API request
