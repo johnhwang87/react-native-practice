@@ -1,6 +1,8 @@
 'use strict';
 
 var React = require('react-native');
+
+var SearchResults = require('./SearchResults');
 // destructuring assignment, lets you extract multiple object properties and assign them to variables. can directly refer to StyleSheet rather than React.StyleSheet
 var {
   // css
@@ -128,7 +130,12 @@ class SearchPage extends Component {
     _handleResponse(response) {
       this.setState({ isLoading: false , message: '' });
       if (response.application_response_code.substr(0, 1) === '1') {
-        console.log('Properties found: ' + response.listings.length);
+        this.props.navigator.push({
+          title: 'Results',
+          // navigates to SearchResults component and passes in the listings from the API request
+          component: SearchResults,
+          passProps: {listings: response.listings}
+        });
       } else {
         this.setState({ message: 'Location not recognized; please try again.'});
       }
